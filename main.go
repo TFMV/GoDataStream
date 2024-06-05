@@ -1,14 +1,20 @@
 package main
 
 import (
-	"github.com/TFMV/GoDataStream/handlers"
+	"fmt"
 
-	"github.com/gin-gonic/gin"
+	"github.com/TFMV/GoDataStream/handlers"
+	"github.com/TFMV/GoDataStream/models"
+	"github.com/TFMV/GoDataStream/storage"
+	"github.com/TFMV/GoDataStream/transform"
+	"github.com/TFMV/GoDataStream/validation"
 )
 
 func main() {
-	router := gin.Default()
-	router.POST("/encode", handlers.EncodeUser)
-	router.POST("/decode", handlers.DecodeUser)
-	router.Run(":8080")
+	fmt.Println("GoDataStream microservice")
+	handlers.HandleRequest()
+	storage.StoreData()
+	transform.TransformData()
+	validation.ValidateData()
+	models.PrintModel()
 }
