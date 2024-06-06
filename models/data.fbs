@@ -1,9 +1,0 @@
-namespace models;
-
-table User {
-  id: string;
-  name: string;
-  email: string;
-}
-
-root_type User;
