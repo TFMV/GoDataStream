@@ -1,0 +1,13 @@
+kafka:
+  brokers:
+    - "localhost:9092"
+  topic: "user-topic"
+  groupID: "example-group"
+
+bigquery:
+  projectID: "your-project-id"
+  datasetID: "your_dataset_id"
+  tableID: "your_table_id"
+
+arrow:
+  filePath: "path/to/your/data.arrow"
