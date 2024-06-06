@@ -33,7 +33,7 @@ func EncodeUser(c *gin.Context) {
 	email := builder.CreateString(user["email"].(string))
 
 	models.UserStart(builder)
-	models.UserAddId(builder, int32(user["id"].(float64)))
+	models.UserAddId(builder, flatbuffers.UOffsetT(user["id"].(int32))) // Convert int32 to flatbuffers.UOffsetT
 	models.UserAddName(builder, name)
 	models.UserAddEmail(builder, email)
 	userOffset := models.UserEnd(builder)

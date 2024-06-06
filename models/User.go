@@ -41,16 +41,12 @@ func (rcv *User) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *User) Id() int32 {
+func (rcv *User) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
-		return rcv._tab.GetInt32(o + rcv._tab.Pos)
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
-	return 0
-}
-
-func (rcv *User) MutateId(n int32) bool {
-	return rcv._tab.MutateInt32Slot(4, n)
+	return nil
 }
 
 func (rcv *User) Name() []byte {
@@ -72,8 +68,8 @@ func (rcv *User) Email() []byte {
 func UserStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }
-func UserAddId(builder *flatbuffers.Builder, id int32) {
-	builder.PrependInt32Slot(0, id, 0)
+func UserAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
 }
 func UserAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(name), 0)

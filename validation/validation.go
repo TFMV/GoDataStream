@@ -1,10 +1,17 @@
 package validation
 
-import "errors"
+import (
+	"regexp"
 
-func ValidateData(data map[string]interface{}) error {
-	if data["id"] == nil || data["name"] == nil || data["email"] == nil {
-		return errors.New("missing required fields")
+	"github.com/TFMV/GoDataStream/models"
+)
+
+// ValidateUser checks if the user record is valid
+func ValidateUser(user *models.User) bool {
+	if user.Id() == "" || user.Name() == "" || user.Email() == "" {
+		return false
 	}
-	return nil
+	emailRegex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
+	re := regexp.MustCompile(emailRegex)
+	return re.MatchString(string(user.Email()))
 }
