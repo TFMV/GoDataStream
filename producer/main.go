@@ -7,14 +7,17 @@ import (
 	"log"
 	"os"
 
+	"github.com/TFMV/GoDataStream/config"
 	"github.com/apache/arrow/go/arrow/ipc"
 	"github.com/apache/arrow/go/arrow/memory"
 	"github.com/segmentio/kafka-go"
 )
 
 func main() {
+	config.LoadConfig()
+
 	// Open Arrow file
-	file, err := os.Open("path/to/your/data.arrow")
+	file, err := os.Open(config.AppConfig.Arrow.FilePath)
 	if err != nil {
 		log.Fatalf("failed to open arrow file: %v", err)
 	}
@@ -29,10 +32,9 @@ func main() {
 	defer reader.Close()
 
 	// Create a new Kafka producer
-	brokers := []string{"localhost:9092"}
 	writer := kafka.NewWriter(kafka.WriterConfig{
-		Brokers:  brokers,
-		Topic:    "user-topic",
+		Brokers:  config.AppConfig.Kafka.Brokers,
+		Topic:    config.AppConfig.Kafka.Topic,
 		Balancer: &kafka.LeastBytes{},
 	})
 	defer writer.Close()
