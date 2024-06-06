@@ -3,7 +3,7 @@ package storage
 import (
 	"context"
 	"encoding/json"
-	"log"
+	"fmt"
 
 	"cloud.google.com/go/bigquery"
 )
@@ -15,25 +15,34 @@ type User struct {
 	Email string `json:"email"`
 }
 
-// StoreInBigQuery stores data in BigQuery
-func StoreInBigQuery(datasetID, tableID string, data []byte) error {
+// Save implements the ValueSaver interface.
+func (u *User) Save() (map[string]bigquery.Value, string, error) {
+	return map[string]bigquery.Value{
+		"id":    u.Id,
+		"name":  u.Name,
+		"email": u.Email,
+	}, bigquery.NoDedupeID, nil
+}
+
+// StoreInBigQuery stores data in BigQuery using the legacy streaming insert API
+func StoreInBigQuery(projectID, datasetID, tableID string, data []byte) error {
 	ctx := context.Background()
-	client, err := bigquery.NewClient(ctx, "your-project-id")
+	client, err := bigquery.NewClient(ctx, projectID)
 	if err != nil {
-		return err
+		return fmt.Errorf("bigquery.NewClient: %w", err)
 	}
 	defer client.Close()
 
 	var user User
 	if err := json.Unmarshal(data, &user); err != nil {
-		return err
+		return fmt.Errorf("json.Unmarshal: %w", err)
 	}
 
-	u := client.Dataset(datasetID).Table(tableID).Uploader()
-	if err := u.Put(ctx, user); err != nil {
-		return err
+	inserter := client.Dataset(datasetID).Table(tableID).Inserter()
+	if err := inserter.Put(ctx, []*User{&user}); err != nil {
+		return fmt.Errorf("inserter.Put: %w", err)
 	}
 
-	log.Printf("Data inserted into BigQuery: %v", user)
+	fmt.Printf("Data inserted into BigQuery: %v\n", user)
 	return nil
 }
