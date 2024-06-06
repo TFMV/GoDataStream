@@ -2,19 +2,16 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/TFMV/GoDataStream/handlers"
-	"github.com/TFMV/GoDataStream/models"
-	"github.com/TFMV/GoDataStream/storage"
-	"github.com/TFMV/GoDataStream/transform"
-	"github.com/TFMV/GoDataStream/validation"
 )
 
 func main() {
-	fmt.Println("GoDataStream microservice")
-	handlers.HandleRequest()
-	storage.StoreData()
-	transform.TransformData()
-	validation.ValidateData()
-	models.PrintModel()
+	fmt.Println("Go Data Stream")
+
+	user := map[string]interface{}{
+		"id":    1,
+		"name":  "John Doe",
+		"email": "",
+	}
+
+	fmt.Println(user)
 }
