@@ -3,11 +3,12 @@ package main
 import (
 	"log"
 
-	"github.com/TFMV/GoDataStream/consumer/storage"
+	kafka "github.com/TFMV/GoDataStream/consumer/kafka"
+	storage "github.com/TFMV/GoDataStream/consumer/storage"
 )
 
 func main() {
-	consumer := storage.NewKafkaConsumer([]string{"localhost:9092"}, "user-topic", "example-group")
+	consumer := kafka.NewKafkaConsumer([]string{"localhost:9092"}, "user-topic", "example-group")
 	defer consumer.Close()
 
 	consumer.Consume(func(key, value []byte) {

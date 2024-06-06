@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/TFMV/GoDataStream/producer/handlers"
 	"github.com/gin-gonic/gin"
 )
@@ -10,6 +8,5 @@ import (
 func main() {
 	r := gin.Default()
 	r.POST("/encode", handlers.EncodeUser)
-
-	log.Fatal(r.Run(":8080"))
+	r.Run(":8080") // Run on port 8080
 }
